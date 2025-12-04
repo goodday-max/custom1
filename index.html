@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>디엑셀 커스텀 데칼 디자인 프리뷰 I</title><br>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquareNeo@1.0/nanumsquareneo.css">
+
+  <style>
+    /* =========================================
+       1. 폰트 정의
+       ========================================= */
+    @font-face {
+      font-family: 'TmonMonsori';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'BMDOHYEON';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'BMJUA';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'BMYEONSUNG';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMYEONSUNG.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'GangwonEdu_OTFBoldA';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'MaplestoryOTFLight';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFLight.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'MaruBuri-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri-Regular.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'Cafe24Supermagic-Bold-v1.0';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/Cafe24Supermagic-Bold-v1.0.woff2') format('woff2');
+      font-weight: 700; font-style: normal;
+    }
+    @font-face {
+      font-family: 'Yeonji';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_11@1.0/Yunji.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'BMEULJIRO';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/BMEULJIRO.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'NeoDunggeunmoPro-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'ChosunGs';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGs.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    @font-face {
+      font-family: 'Cafe24SsurroundAir';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+
+    /* =========================================
+       2. 스타일 정의
+       ========================================= */
+    body {
+      font-family: 'NanumSquareNeo', -apple-system, sans-serif;
+      max-width: 900px;
+      margin: 10px auto; 40px
+      padding: 0 16px;
+      line-height: 1.6;
+      font-size: 15px;
+      color: #333;
+    }
+
+    h1 { margin-bottom: 4px; font-size: 24px; font-weight: 700; }
+    
+    label { display: block; margin-top: 16px; font-weight: 600; font-size: 14px; }
+
+    textarea, select {
+      width: 100%; box-sizing: border-box; padding: 8px 10px;
+      margin-top: 6px; border: 1px solid #ddd; border-radius: 6px;
+      font-family: inherit; font-size: 14px;
+    }
+
+    /* 🔥 문구입력칸 1줄만 보이게 + 스크롤 숨김 */
+    textarea {
+      resize: none;
+      height: 32px;
+      min-height: 32px;
+      line-height: 1.4;
+      overflow: hidden;
+    }
+
+    .preview-box {
+      margin-top: 14px; padding: 10px; border-radius: 8px;
+      border: 1px dashed #bbb; background: #fafafa;
+      width: 100%; max-width: 900px; box-sizing: border-box;
+    }
+
+    .car-wrap { position: relative; width: 100%; max-width: 900px; }
+    #car-img { width: 100%; display: block; }
+
+    .window-overlay {
+      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      pointer-events: none; background: transparent; overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .align-group {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;   /* ⬅ 줄 단위로 위→아래 */
+      align-items: flex-start;
+    }
+
+    .line-row {
+      display: inline-flex;
+      flex-direction: row;      /* ⬅ (텍스트, 가이드) 가로 나열 */
+      align-items: flex-start;
+    }
+
+    .preview-line {
+      white-space: nowrap;
+      text-align: left;
+      color: #ffffff;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
+      line-height: 1;
+    }
+
+    /* ===== 가이드라인 (텍스트 + 괄호 통합 버전) ===== */
+
+    .size-ruler-overlay {
+      display: inline-flex;
+      align-items: center;
+      width: auto;
+      margin-left: 8px;
+      margin-right: 0;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .size-ruler-inner {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .size-ruler-line-vertical,
+    .size-ruler-end {
+      display: none;
+    }
+
+    .size-ruler-display {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'NanumSquareNeo', sans-serif;
+      color: #FFE87C;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0.2; 
+    }
+
+    .size-bracket {
+      display: inline-block;
+      font-weight: 300;
+      font-size: 1em;
+      margin-left: 0;
+      margin-right: -0.15em;
+      line-height: 1;
+      color: #FFE87C;
+      transform: scaleX(0.8);
+      transform-origin: center;
+    }
+
+    .size-arrow {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 6px;
+      flex-direction: row-reverse;
+    }
+    .size-arrow-line {
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: #FFE87C;
+    }
+    .size-arrow-head {
+      width: 0;
+      height: 0;
+      border-top: 2px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-right: 12px solid #FFE87C;
+      margin-right: -1px;
+    }
+
+    .size-ruler-label {
+      font-size: 1em;
+      color: #FFE87C;
+      white-space: nowrap;
+      background: transparent;
+      padding: 0 4px 0 0;
+    }
+
+    .size-box {
+      margin-top: 10px; padding: 10px 12px; border-radius: 8px;
+      border: 1px solid #e0e0e0; background: #ffffff;
+      font-size: 13px; color: #333; line-height: 1.5;
+    }
+    .size-note, .preview-note { font-size: 12px; color: #777; margin-top: 6px; }
+
+    #measure-span {
+      position: absolute; visibility: hidden; left: -9999px; top: -9999px;
+      white-space: pre-line;
+      line-height: 1;
+    }
+
+    option[value="font1"]  { font-family: 'TmonMonsori', sans-serif; }
+    option[value="font2"]  { font-family: 'BMDOHYEON',   sans-serif; }
+    option[value="font3"]  { font-family: 'BMJUA',       sans-serif; }
+    option[value="font4"]  { font-family: 'BMYEONSUNG',  sans-serif; }
+    option[value="font5"]  { font-family: 'GangwonEdu_OTFBoldA', sans-serif; }
+    option[value="font6"]  { font-family: 'MaplestoryOTFLight',  sans-serif; }
+    option[value="font7"]  { font-family: 'MaruBuri-Regular',    serif; }
+    option[value="font8"]  { font-family: 'Cafe24Supermagic-Bold-v1.0', sans-serif; }
+    option[value="font9"]  { font-family: 'Yeonji', sans-serif; font-weight: bold; }
+    option[value="font10"] { font-family: 'NanumSquareNeo', sans-serif; font-weight: 800; }
+    option[value="font11"] { font-family: 'BMEULJIRO',     sans-serif; }
+    option[value="font13"] { font-family: 'NeoDunggeunmoPro-Regular', monospace; }
+    option[value="font14"] { font-family: 'ChosunGs',      serif; font-weight: 600; }
+    option[value="font15"] { font-family: 'Cafe24SsurroundAir', sans-serif; font-weight: 700; }
+
+  </style>
+</head>
+<body>
+  <h1>디엑셀 커스텀 데칼 디자인 프리뷰 I</h1>
+
+  <span style="display:block; margin:5px 0 30px; font-weight:400; font-size:15px; color:#666;">
+  스티커의 디자인과 대략적인 크기를 미리 살펴볼 수 있는 페이지입니다.
+</span>
+
+  <!-- 입력칸 -->
+  <label>
+    문구입력
+    <span style="font-weight:400; font-size:12px; color:#666;">
+      (총 15글자까지 입력 가능합니다)
+    </span>
+    <textarea id="text-input"   maxlength="15" placeholder="첫 번째 문구를 입력하세요"></textarea>
+    <textarea id="text-input-2" maxlength="15" placeholder="두 번째 문구를 입력하세요 (선택)"></textarea>
+    <textarea id="text-input-3" maxlength="15" placeholder="세 번째 문구를 입력하세요 (선택)"></textarea>
+  </label>
+
+  <label>
+    사이즈
+    <select id="width-select">
+      <option value="3">S (세로 3cm)</option>
+      <option value="4">소 (세로 4cm)</option>
+      <option value="5">중 (세로 5cm)</option>
+      <option value="6">대 (세로 6cm)</option>
+      <option value="" disabled>──────────</option>
+      <option value="10">*대형사이즈10 (세로 10cm)</option>  
+      <option value="12">*대형사이즈12 (세로 12cm)</option>
+      <option value="15">*대형사이즈15 (세로 15cm)</option>       
+    </select>
+  </label>
+
+  <label>
+    글씨체
+    <select id="font-select">
+      <option value="font1">1번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font2">2번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font3">3번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font4">4번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font5">5번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font6">6번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font7">7번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font8">8번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font9">9번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font10">10번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font11">11번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font13">13번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font14">14번 글씨체 - 가나다라 ABCY abcy 1234</option>
+      <option value="font15">15번 글씨체 - 가나다라 ABCY abcy 1234</option>
+    </select>
+  </label>
+
+  <label>
+    정렬
+    <select id="align-select">
+      <option value="left" selected>좌측정렬</option>
+      <option value="right">우측정렬</option>
+      <option value="center">중앙정렬</option>
+    </select>
+  </label>
+
+  <div id="preview-box" class="preview-box">
+    <div class="car-wrap">
+      <img id="car-img" src="쏘렌토 세로900.jpg" alt="차량 이미지">
+
+      <div id="window-overlay" class="window-overlay">
+        <div id="align-group" class="align-group">
+
+          <!-- 1줄 -->
+          <div class="line-row" id="line-row-1">
+            <div class="preview-line" id="preview-line-1">문구를 입력하면 미리보기가 표시됩니다</div>
+            <div class="size-ruler-overlay">
+              <div class="size-ruler-inner">
+                <div class="size-ruler-line-vertical"></div>
+                <div class="size-ruler-end top"></div>
+                <div class="size-ruler-end bottom"></div>
+              </div>
+              <div class="size-ruler-display">
+                <span class="size-bracket">)</span>
+                <span class="size-arrow">
+                  <span class="size-arrow-line"></span>
+                  <span class="size-arrow-head"></span>
+                </span>
+                <span class="size-ruler-label">세로 3cm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2줄 -->
+          <div class="line-row" id="line-row-2">
+            <div class="preview-line" id="preview-line-2"></div>
+            <div class="size-ruler-overlay">
+              <div class="size-ruler-inner">
+                <div class="size-ruler-line-vertical"></div>
+                <div class="size-ruler-end top"></div>
+                <div class="size-ruler-end bottom"></div>
+              </div>
+              <div class="size-ruler-display">
+                <span class="size-bracket">)</span>
+                <span class="size-arrow">
+                  <span class="size-arrow-line"></span>
+                  <span class="size-arrow-head"></span>
+                </span>
+                <span class="size-ruler-label">세로 3cm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3줄 -->
+          <div class="line-row" id="line-row-3">
+            <div class="preview-line" id="preview-line-3"></div>
+            <div class="size-ruler-overlay">
+              <div class="size-ruler-inner">
+                <div class="size-ruler-line-vertical"></div>
+                <div class="size-ruler-end top"></div>
+                <div class="size-ruler-end bottom"></div>
+              </div>
+              <div class="size-ruler-display">
+                <span class="size-bracket">)</span>
+                <span class="size-arrow">
+                  <span class="size-arrow-line"></span>
+                  <span class="size-arrow-head"></span>
+                </span>
+                <span class="size-ruler-label">세로 3cm</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-note">
+    예시차량 : 기아 쏘렌토 MQ4 PE<br>
+    *화면에서 보이는 차량과 제품의 비율은 실제와 차이가 있을 수 있으니, 참고용으로 확인해 주세요.
+  </div>
+
+  <div id="size-box" class="size-box">
+   
+
+    <!-- ★줄별 사이즈 표시 -->
+    <div id="size-line1">1번째 줄 : -</div>
+    <div id="size-line2">2번째 줄 : -</div>
+    <div id="size-line3">3번째 줄 : -</div>
+    <!-- ★추가 끝 -->
+    <div class="size-note">
+
+    </div>
+
+ <div id="size-width">전체사이즈 : -</div>
+    <div id="size-height"></div>
+ <div class="size-note">
+
+*가로사이즈는 추정치로 계산된 수치이므로 실제크기와 다소 차이가 있을 수 있습니다. (범위 : ± 0.5~10cm)<BR>
+*전체사이즈의 세로사이즈는 유저의 부착형태에 따라 달라질 수 있습니다.
+
+    </div>
+  </div>
+
+  <span id="measure-span"></span>
+
+<script>
+  const textInput1      = document.getElementById("text-input");
+  const textInput2      = document.getElementById("text-input-2");
+  const textInput3      = document.getElementById("text-input-3");
+  const fontSelect      = document.getElementById("font-select");
+  const widthSelect     = document.getElementById("width-select");
+  const alignSelect     = document.getElementById("align-select");
+  const measureSpan     = document.getElementById("measure-span");
+  const carImg          = document.getElementById("car-img");
+  const alignGroup      = document.getElementById("align-group");
+  const windowOverlay   = document.getElementById("window-overlay");
+  const sizeBoxWidth    = document.getElementById("size-width");
+  const sizeBoxHeight   = document.getElementById("size-height");
+
+  const previewLines    = document.querySelectorAll(".preview-line");
+  const lineRows        = document.querySelectorAll(".line-row");
+  const rulerOverlays   = document.querySelectorAll(".size-ruler-overlay");
+  const rulerLabels     = document.querySelectorAll(".size-ruler-label");
+  const brackets        = document.querySelectorAll(".size-bracket");
+  const arrows          = document.querySelectorAll(".size-arrow");
+  const arrowHeads      = document.querySelectorAll(".size-arrow-head");
+
+  const IMAGE_REAL_HEIGHT_CM = 90; 
+  const MAX_LEN       = 15;
+  const LINE_HEIGHT   = 1.2;
+
+  const IMG_ORIG_W   = 1900; 
+  const LEFT_TEXT_X  = 348;
+  const RIGHT_TEXT_X = 1516;
+
+  // ★줄별 사이즈 요소
+  const sizeLine1 = document.getElementById("size-line1");
+  const sizeLine2 = document.getElementById("size-line2");
+  const sizeLine3 = document.getElementById("size-line3");
+  const sizeLineElems = [sizeLine1, sizeLine2, sizeLine3];
+  // ★끝
+
+  function getSelectedFontConfig() {
+    const val = fontSelect.value;
+    let family = "'NanumSquareNeo', sans-serif";
+    let weight = "normal";
+
+    if (val === "font1")  family = "'TmonMonsori', sans-serif";
+    if (val === "font2")  family = "'BMDOHYEON', sans-serif";
+    if (val === "font3")  family = "'BMJUA', sans-serif";
+    if (val === "font4")  family = "'BMYEONSUNG', sans-serif";
+    if (val === "font5")  family = "'GangwonEdu_OTFBoldA', sans-serif";
+    if (val === "font6")  family = "'MaplestoryOTFLight', sans-serif";
+    if (val === "font7")  { family = "'MaruBuri-Regular', serif"; weight = "bold"; }
+    if (val === "font8")  { family = "'Cafe24Supermagic-Bold-v1.0', sans-serif"; weight = "700"; }
+    if (val === "font9")  { family = "'Yeonji', sans-serif"; weight = "bold"; }
+    if (val === "font10") { family = "'NanumSquareNeo', sans-serif"; weight = "800"; }
+    if (val === "font11") family = "'BMEULJIRO', sans-serif";
+    if (val === "font13") family = "'NeoDunggeunmoPro-Regular', monospace";
+    if (val === "font14") { family = "'ChosunGs', serif"; weight = "600"; }
+    if (val === "font15") { family = "'Cafe24SsurroundAir', sans-serif"; weight = "700"; }
+
+    return { family, weight };
+  }
+
+  function applyRulerLabelPosition(align) {
+    rulerLabels.forEach(lbl => {
+      lbl.style.textAlign = (align === 'right') ? 'right' : 'left';
+    });
+  }
+
+  function recompute() {
+    // 3개 입력칸에서 각각 텍스트 가져오기 + 15자 제한 유지
+    let r1 = textInput1.value || "";
+    let r2 = textInput2.value || "";
+    let r3 = textInput3.value || "";
+
+    if (r1.length > MAX_LEN) {
+      r1 = r1.substring(0, MAX_LEN);
+      textInput1.value = r1;
+    }
+    if (r2.length > MAX_LEN) {
+      r2 = r2.substring(0, MAX_LEN);
+      textInput2.value = r2;
+    }
+    if (r3.length > MAX_LEN) {
+      r3 = r3.substring(0, MAX_LEN);
+      textInput3.value = r3;
+    }
+
+    const lines = [];
+    if (r1.trim().length > 0) lines.push(r1);
+    if (r2.trim().length > 0) lines.push(r2);
+    if (r3.trim().length > 0) lines.push(r3);
+
+    const processed = lines.join("\n");
+    const pureText  = processed;
+
+    const { family, weight } = getSelectedFontConfig();
+
+    fontSelect.style.fontFamily = family;
+    fontSelect.style.fontWeight = weight;
+
+    previewLines.forEach(line => {
+      line.style.fontFamily = family;
+      line.style.fontWeight = weight;
+      line.style.lineHeight = LINE_HEIGHT;
+      line.style.whiteSpace = "nowrap";
+    });
+
+    measureSpan.style.fontFamily = family;
+    measureSpan.style.fontWeight = weight;
+    measureSpan.style.lineHeight = "1";
+    measureSpan.style.whiteSpace = "pre-line";
+
+    const carRect = carImg.getBoundingClientRect();
+    const carH = carRect.height;
+    const carW = carRect.width;
+    if (!carH || !carW) return;
+
+    const selCmRaw = widthSelect.value;
+    const selCm = parseFloat(selCmRaw) || 0;
+    const targetHeightPx = selCm ? (carH * (selCm / IMAGE_REAL_HEIGHT_CM)) : 0;
+
+    const align = alignSelect.value;
+
+    // 기본 정렬 기준 세팅
+    let offsetXBase = 0;
+    const baseOffsetY = -20;   // 기본 위치
+    let offsetY = baseOffsetY; // 나중에 줄 수에 따라 조정할 값
+    const scaleX = carW / IMG_ORIG_W;
+
+    const EXTRA_LEFT_SHIFT = 18;
+
+    if (align === 'left') {
+      windowOverlay.style.justifyContent = 'flex-start';
+      alignGroup.style.alignItems = 'flex-start';
+
+      previewLines.forEach(line => line.style.textAlign = 'left');
+
+      offsetXBase = LEFT_TEXT_X * scaleX + EXTRA_LEFT_SHIFT;
+
+      lineRows.forEach(row => {
+        const textEl    = row.querySelector(".preview-line");
+        const overlayEl = row.querySelector(".size-ruler-overlay");
+        if (textEl && overlayEl) {
+          textEl.style.order    = 1;
+          overlayEl.style.order = 2;
+        }
+      });
+
+      brackets.forEach(b => {
+        b.textContent = ')';
+        b.style.order = 1;
+      });
+      arrows.forEach(a => {
+        a.style.order = 2;
+        a.style.flexDirection = 'row-reverse';
+      });
+      arrowHeads.forEach(h => {
+        h.style.borderRight = '12px solid #FFE87C';
+        h.style.borderLeft  = '0';
+      });
+      rulerLabels.forEach(l => {
+        l.style.order = 3;
+      });
+
+    } else if (align === 'right') {
+      windowOverlay.style.justifyContent = 'flex-end';
+      alignGroup.style.alignItems = 'flex-end';
+
+      previewLines.forEach(line => line.style.textAlign = 'right');
+
+      const scaledRightX = RIGHT_TEXT_X * scaleX;
+      offsetXBase = scaledRightX - carW;
+
+      lineRows.forEach(row => {
+        const textEl    = row.querySelector(".preview-line");
+        const overlayEl = row.querySelector(".size-ruler-overlay");
+        if (textEl && overlayEl) {
+          overlayEl.style.order = 1;
+          textEl.style.order    = 2;
+        }
+      });
+
+      brackets.forEach(b => {
+        b.textContent = '(';
+        b.style.order = 3;
+      });
+      rulerLabels.forEach(l => {
+        l.style.order = 1;
+      });
+      arrows.forEach(a => {
+        a.style.order = 2;
+        a.style.flexDirection = 'row';
+      });
+      arrowHeads.forEach(h => {
+        h.style.borderLeft  = '12px solid #FFE87C';
+        h.style.borderRight = '0';
+      });
+
+    } else { // center
+      windowOverlay.style.justifyContent = 'center';
+      alignGroup.style.alignItems = 'center';
+
+      previewLines.forEach(line => line.style.textAlign = 'center');
+
+      offsetXBase = 0;
+
+      lineRows.forEach(row => {
+        const textEl    = row.querySelector(".preview-line");
+        const overlayEl = row.querySelector(".size-ruler-overlay");
+        if (textEl && overlayEl) {
+          textEl.style.order    = 1;
+          overlayEl.style.order = 2;
+        }
+      });
+
+      brackets.forEach(b => {
+        b.textContent = ')';
+        b.style.order = 1;
+      });
+      arrows.forEach(a => {
+        a.style.order = 2;
+        a.style.flexDirection = 'row-reverse';
+      });
+      rulerLabels.forEach(l => {
+        l.style.order = 3;
+      });
+      arrowHeads.forEach(h => {
+        h.style.borderRight = '12px solid #FFE87C';
+        h.style.borderLeft  = '0';
+      });
+    }
+
+    applyRulerLabelPosition(align);
+
+    // 텍스트 없을 때 (플레이스홀더)
+    if (!pureText || pureText.length === 0) {
+      previewLines.forEach(line => {
+        line.style.fontSize   = "14px";
+        line.style.fontFamily = "'NanumSquareNeo', sans-serif";
+        line.style.fontWeight = "400";
+      });
+
+      if (previewLines[0]) previewLines[0].textContent = "문구를 입력하면";
+      if (previewLines[1]) previewLines[1].textContent = "미리보기가 표시됩니다";
+      if (previewLines[2]) previewLines[2].textContent = "";
+
+      lineRows.forEach((row, idx) => {
+        row.style.display = (idx <= 1 ? "flex" : "none");
+      });
+
+      rulerOverlays.forEach(ov => {
+        ov.style.display = "none";
+      });
+
+      // 전체사이즈 초기화
+      sizeBoxWidth.textContent  = "전체사이즈 : -";
+      sizeBoxHeight.textContent = "";
+
+      // 줄별 사이즈 초기화
+      sizeLineElems.forEach((el, idx) => {
+        if (el) el.textContent = `${idx+1}번째 줄 : -`;
+      });
+
+      alignGroup.style.transform = `translate(${offsetXBase}px, ${baseOffsetY}px)`;
+      return;
+    }
+
+    // 텍스트 있을 때: 줄별 표시/숨김
+    lineRows.forEach((row, idx) => {
+      const textLine  = lines[idx] || "";
+      const textEl    = row.querySelector(".preview-line");
+      const overlayEl = row.querySelector(".size-ruler-overlay");
+      if (textLine) {
+        row.style.display = "flex";
+        if (textEl)    textEl.textContent = textLine;
+        if (overlayEl) overlayEl.style.display = "inline-flex";
+      } else {
+        row.style.display = "none";
+        if (textEl)    textEl.textContent = "";
+        if (overlayEl) overlayEl.style.display = "none";
+      }
+    });
+
+    // ✅ 폰트 크기는 "1번째 줄" 높이를 선택한 세로 cm로 맞춘다
+    const baseLineText = lines[0] || processed;
+
+    const finalSize = findFontSizeByHeight(
+      baseLineText,
+      family,
+      weight,
+      targetHeightPx || 1
+    );
+
+    previewLines.forEach(line => {
+      line.style.fontSize = finalSize + "px";
+    });
+
+    // 실제 전체 블록 크기 측정용 (줄간격 포함)
+    measureSpan.style.fontSize   = finalSize + "px";
+    measureSpan.style.lineHeight = LINE_HEIGHT;
+    measureSpan.style.whiteSpace = "pre-line";
+    measureSpan.textContent      = processed;
+    const rect = measureSpan.getBoundingClientRect();
+
+    const cmPerPx = IMAGE_REAL_HEIGHT_CM / carH;
+    const realW = rect.width * cmPerPx;
+    const realH = rect.height * cmPerPx;  // 여러 줄 + 줄간격 포함
+
+    // 🔥 전체사이즈 계산
+    let totalWidthCm  = realW;
+    let totalHeightCm;
+
+    if (lines.length <= 1) {
+      // 한 줄일 때: 세로는 선택한 cm가 있으면 그걸 사용 (없으면 실제값)
+      totalHeightCm = selCm || realH;
+    } else {
+      // 두 줄 이상: 전체 블록(줄간격 포함) 실제 높이 사용
+      totalHeightCm = realH;
+    }
+
+    sizeBoxWidth.textContent  = `전체사이즈 : 가로 ${totalWidthCm.toFixed(1)} cm / 세로 ${totalHeightCm.toFixed(1)} cm`;
+    sizeBoxHeight.textContent = "";
+
+    // ★줄별 사이즈 계산
+    sizeLineElems.forEach((el, idx) => {
+      if (!el) return;
+      const textLine = lines[idx] || "";
+      if (!textLine) {
+        el.textContent = `${idx+1}번째 줄 : -`;
+        return;
+      }
+      // 해당 줄만 측정
+      measureSpan.style.fontSize   = finalSize + "px";
+      measureSpan.style.fontFamily = family;
+      measureSpan.style.fontWeight = weight;
+      measureSpan.style.lineHeight = "1";
+      measureSpan.style.whiteSpace = "nowrap";
+      measureSpan.textContent      = textLine;
+      const lineRect = measureSpan.getBoundingClientRect();
+      const lineWcm = lineRect.width * cmPerPx;
+      const lineHcm = selCm || (lineRect.height * cmPerPx);
+      el.textContent = `${idx+1}번째 줄 : 가로 ${lineWcm.toFixed(1)} cm / 세로 ${lineHcm.toFixed(1)} cm`;
+    });
+    // ★끝
+
+    brackets.forEach(b => {
+      b.style.fontSize = `${finalSize}px`;
+    });
+
+    const spacePx = finalSize * 0.25;
+
+    rulerOverlays.forEach((ov, idx) => {
+      const lineText = lines[idx] || "";
+      if (!lineText) return;
+      if (align === 'right') {
+        ov.style.marginRight = `${spacePx}px`;
+        ov.style.marginLeft  = `0px`;
+      } else {
+        ov.style.marginLeft  = `${spacePx}px`;
+        ov.style.marginRight = `0px`;
+      }
+    });
+
+    const labelText = selCm
+      ? `세로 ${selCm}cm`
+      : `세로 - cm`;
+    rulerLabels.forEach(l => {
+      l.textContent = labelText;
+    });
+
+    let finalOffsetX = offsetXBase;
+    if (align === 'center') {
+      const firstOverlay = rulerOverlays[0];
+      if (firstOverlay) {
+        const rulerRect = firstOverlay.getBoundingClientRect();
+        const rulerW = rulerRect.width || 0;
+        const adjust = (spacePx + rulerW) / 2;
+        finalOffsetX = offsetXBase + adjust;
+      }
+    }
+
+    // 🔥 여기서 "줄 개수"에 따라 전체를 위로 올려준다
+    if (lines.length >= 2) {
+      // 줄이 많을수록 조금 더 위로
+      const extraOffsetY = -finalSize * 0.5 * (lines.length - 1);
+      offsetY = baseOffsetY + extraOffsetY;
+    } else {
+      offsetY = baseOffsetY;
+    }
+
+    alignGroup.style.transform = `translate(${finalOffsetX}px, ${offsetY}px)`;
+  }
+
+  function findFontSizeByHeight(text, family, weight, targetHeight) {
+    if (!targetHeight) return 10;
+
+    let low = 1, high = 500, best = 10;
+
+    for (let i = 0; i < 20; i++) {
+      const mid = (low + high) / 2;
+      measureSpan.style.fontSize   = mid + "px";
+      measureSpan.style.fontFamily = family;
+      measureSpan.style.fontWeight = weight;
+      measureSpan.style.lineHeight = "1";
+      measureSpan.textContent      = text;
+
+      const h = measureSpan.getBoundingClientRect().height;
+      if (h > targetHeight) {
+        high = mid;
+      } else {
+        best = mid;
+        low = mid;
+      }
+    }
+    return best;
+  }
+
+  // 3개 입력칸 모두 엔터 방지 + 입력 시 재계산
+  [textInput1, textInput2, textInput3].forEach((el) => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+    });
+    el.addEventListener("input", recompute);
+  });
+
+  fontSelect.addEventListener("change", recompute);
+  widthSelect.addEventListener("change", recompute);
+  alignSelect.addEventListener("change", recompute);
+  window.addEventListener("resize",    recompute);
+  carImg.addEventListener("load",      recompute);
+  window.onload = recompute;
+</script>
+
+</body>
+</html>
